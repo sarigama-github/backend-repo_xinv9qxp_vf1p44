@@ -41,8 +41,14 @@ class Product(BaseModel):
 # Add your own schemas here:
 # --------------------------------------------------
 
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+class Message(BaseModel):
+    """
+    SMS messages collection schema
+    Collection name: "message"
+    """
+    to: str = Field(..., description="Destination phone number in E.164 format, e.g., +15551234567")
+    body: str = Field(..., min_length=1, max_length=1600, description="SMS message body")
+    status: str = Field("queued", description="Delivery status: queued/sent/failed")
+    provider: Optional[str] = Field(None, description="Provider used to send the SMS")
+    sid: Optional[str] = Field(None, description="Provider message SID/ID")
+    error: Optional[str] = Field(None, description="Error description if failed")
